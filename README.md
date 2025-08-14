@@ -1,28 +1,95 @@
-# <span style="font-size:larger; color:red;">**Note: This project is archived.**</span>
+# Telegram to Discord Mirror Bot
 
-Due to lack of time and myself no longer using it, I'm no longer able to maintain this project. As such, it is now in a read-only state, and no further updates or maintenance will be provided.
+A Python bot that mirrors messages from Telegram channels to Discord channels using webhooks.
 
-If you find this project useful and would like to fork it or take over maintenance, feel free to do so. Thank you to everyone who contributed or used this project over the years.
+## Features
 
-# Telegram-To-Discord
-Mirrors all messages from Telegram and translates them if they are not English and sends them to the webhook with all the media. Only works for photos and videos not longer than 60 seconds (imgur limit) in which case it displays a link to the message in Telegram.
+- Multi-channel routing (different Telegram channels → different Discord webhooks)
+- Media file support (images, videos, documents)
+- Automatic translation (optional)
+- File size handling with Imgur fallback
+- Username display customization
 
-# Requirements
+## Railway Deployment
 
-- Python 3.11 or later
-- Python pip -> requirements.txt
-- Discord bot token
-- Telegram API tokens
+### Prerequisites
 
-# How to run
-```py
-#Download the repo and extract to an empty folder
-#Open a CLI ex. CMD,PS,GitBash in the directory
-pip3 install -r requirements.txt
-#Rename example.env to .env
-#Edit info in .env
-#APPID and HASH are created here https://core.telegram.org/api/obtaining_api_id
-python3 main.py
+1. **Telegram API Credentials**:
+   - Get your `APPID` and `APIHASH` from [https://core.telegram.org/api/obtaining_api_id](https://core.telegram.org/api/obtaining_api_id)
+
+2. **Discord Webhooks**:
+   - Create webhooks for each Discord channel you want to receive messages
+
+3. **GitHub Account**:
+   - Push your code to a GitHub repository
+
+### Deployment Steps
+
+1. **Push to GitHub**:
+   ```bash
+   git add .
+   git commit -m "Add Railway deployment files"
+   git push origin main
+   ```
+
+2. **Deploy on Railway**:
+   - Go to [railway.app](https://railway.app)
+   - Sign up/Login with GitHub
+   - Click "New Project" → "Deploy from GitHub repo"
+   - Select your repository
+   - Railway will automatically detect it's a Python project
+
+3. **Set Environment Variables**:
+   In Railway dashboard, go to your project → Variables tab and add:
+   ```
+   APPID=your_telegram_app_id
+   APIHASH=your_telegram_api_hash
+   APINAME=Telegram To Discord
+   DLLOC=./temp/
+   INPUT_CHANNELS=-1001556054753,-1002504978188,-1002586124539,-1002204471065,-1002241695394,-1002418841577,-1002616444563,-1001648271934,-1001651524056,-1001380328653,-1002312090328,-1001557336382,-1001219306781,-1002380293749
+   BLACKLIST=False
+   TRANSLATE=1
+   ```
+
+4. **Deploy**:
+   - Railway will automatically build and deploy your bot
+   - Check the logs to ensure it's running properly
+
+### Configuration
+
+The bot uses the `CHANNEL_ROUTES` dictionary in `main_multi_channel.py` to route messages:
+
+```python
+CHANNEL_ROUTES = {
+    "telegram_channel_id": "discord_webhook_url",
+    # Add more routes as needed
+}
 ```
-# Example
-![image](https://user-images.githubusercontent.com/38784343/186721485-0c1b2393-448a-484d-9ed3-44a30d0d4a8a.png)
+
+### Monitoring
+
+- Check Railway logs for bot status
+- The bot will automatically restart if it crashes
+- Monitor Discord channels for incoming messages
+
+### Troubleshooting
+
+1. **Bot not starting**: Check Railway logs for error messages
+2. **No messages**: Verify Telegram channel IDs and Discord webhooks
+3. **Authentication errors**: Ensure APPID and APIHASH are correct
+
+## Local Development
+
+To run locally:
+
+1. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+2. Create `.env` file with your credentials
+
+3. Run the bot:
+   ```bash
+   python main_multi_channel.py
+   ```
