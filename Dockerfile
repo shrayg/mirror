@@ -1,5 +1,4 @@
 FROM python:3.11
-ADD main.py /
-ADD requirements.txt /
+ADD . /
 RUN pip install -r requirements.txt
-CMD [ "python","-u","main.py" ]
+CMD [ "python","-u","main_multi_channel.py" ]
