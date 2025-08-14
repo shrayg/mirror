@@ -1,1 +1,1 @@
-worker: python ./main_multi_channel.py
+worker: python app.py
